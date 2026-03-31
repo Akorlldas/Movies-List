@@ -1,5 +1,5 @@
 # Getting Started with Create React App
-# usePopcorn / Movies List
+# Movies List
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 一个基于 React 的电影搜索与观影记录应用。用户可以通过 OMDb API 搜索电影、查看详情、为电影打分，并将“已观看”列表持久化到浏览器本地存储。  
