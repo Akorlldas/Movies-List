@@ -4,6 +4,14 @@ import { useKey } from "./useKey";
 import { useLocalStorageState } from "./useLocalStorageState";
 import { useMovies } from "./useMovies";
 
+import {
+  StarIcon,
+  MovieIcon,
+  SparkleStarIcon,
+  HourglassIcon,
+  CalendarIcon,
+} from "./Icons";
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -41,7 +49,6 @@ export default function App() {
 
       <Main>
         <Box>
-          {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
           {isLoading && <Loader />}
           {!isLoading && !error && (
             <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
@@ -62,6 +69,7 @@ export default function App() {
               <WatchedSummary watched={watched} />
               <WatchedMoviesList
                 watched={watched}
+                onSelectMovie={handleSelectMovie}
                 onDeleteWatched={handleDeleteWatched}
               />
             </>
@@ -77,11 +85,7 @@ function Loader() {
 }
 
 function ErrorMessage({ message }) {
-  return (
-    <p className="error">
-      <span>⛔️</span> {message}
-    </p>
-  );
+  return <p className="error">{message}</p>;
 }
 
 function NavBar({ children }) {
@@ -96,8 +100,8 @@ function NavBar({ children }) {
 function Logo() {
   return (
     <div className="logo">
-      <span role="img">🍿</span>
-      <h1>usePopcorn</h1>
+      <MovieIcon size={24} color="#f6f9dc" />
+      <h1>Movies List</h1>
     </div>
   );
 }
@@ -141,7 +145,7 @@ function Box({ children }) {
   return (
     <div className="box">
       <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
-        {isOpen ? "–" : "+"}
+        {isOpen ? "-" : "+"}
       </button>
 
       {isOpen && children}
@@ -166,7 +170,7 @@ function Movie({ movie, onSelectMovie }) {
       <h3>{movie.Title}</h3>
       <div>
         <p>
-          <span>🗓</span>
+          <CalendarIcon size={18} color="#ffa531" />
           <span>{movie.Year}</span>
         </p>
       </div>
@@ -273,13 +277,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
               </p>
               <p>{genre}</p>
               <p>
-                <span>⭐️</span>
+                <StarIcon size={18} color="#ffa531" />
                 {imdbRating} IMDb rating
               </p>
             </div>
           </header>
-
-          {/* <p>{avgRating}</p> */}
 
           <section>
             <div className="rating">
@@ -298,7 +300,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
                 </>
               ) : (
                 <p>
-                  You rated with movie {watchedUserRating} <span>⭐️</span>
+                  You rated with movie {watchedUserRating}{" "}
+                  <StarIcon size={18} color="#ffa531" />
                 </p>
               )}
             </div>
@@ -324,19 +327,19 @@ function WatchedSummary({ watched }) {
       <h2>Movies you watched</h2>
       <div>
         <p>
-          <span>#️⃣</span>
+          <MovieIcon size={19} color="#edf7ef" />
           <span>{watched.length} movies</span>
         </p>
         <p>
-          <span>⭐️</span>
+          <StarIcon size={18} color="#ffa531" />
           <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
-          <span>🌟</span>
+          <SparkleStarIcon size={18} color="#ffa531" />
           <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
-          <span>⏳</span>
+          <HourglassIcon size={16} color="#edf7ef" />
           <span>{avgRuntime} min</span>
         </p>
       </div>
@@ -344,13 +347,14 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMoviesList({ watched, onDeleteWatched }) {
+function WatchedMoviesList({ watched, onSelectMovie, onDeleteWatched }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {watched.map((movie) => (
         <WatchedMovie
           movie={movie}
           key={movie.imdbID}
+          onSelectMovie={onSelectMovie}
           onDeleteWatched={onDeleteWatched}
         />
       ))}
@@ -358,22 +362,22 @@ function WatchedMoviesList({ watched, onDeleteWatched }) {
   );
 }
 
-function WatchedMovie({ movie, onDeleteWatched }) {
+function WatchedMovie({ movie, onSelectMovie, onDeleteWatched }) {
   return (
-    <li>
+    <li onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>
         <p>
-          <span>⭐️</span>
+          <StarIcon size={18} color="#ffa531" />
           <span>{movie.imdbRating}</span>
         </p>
         <p>
-          <span>🌟</span>
+          <SparkleStarIcon size={18} color="#ffa531" />
           <span>{movie.userRating}</span>
         </p>
         <p>
-          <span>⏳</span>
+          <HourglassIcon size={16} color="#edf7ef" />
           <span>{movie.runtime} min</span>
         </p>
 
