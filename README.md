@@ -19,25 +19,13 @@ In the project directory, you can run:
 
 ### 1. 项目简介
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-`usePopcorn` 是一个 React 小型项目，核心目标是帮助用户：
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
 - 按关键词搜索电影
 - 查看电影详情（剧情、演员、导演、IMDb 评分等）
 - 给电影打分
 - 管理“已观看”列表
 - 在刷新页面后保留“已观看”数据
 
-### `npm test`
-
 该项目适合作为 React 组件化、状态管理、自定义 Hook、异步请求与本地存储实践案例。
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### 2. 主要功能
 
@@ -60,13 +48,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
    - `Enter`：聚焦搜索框
    - `Escape`：关闭详情面板
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
 ### 3. 技术栈
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
 - React 18
 - Create React App
@@ -74,11 +56,7 @@ Your app is ready to be deployed!
 - CSS
 - OMDb API
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
 ### 4. 项目结构
-
-### `npm run eject`
 
 ```text
 Movies-List/
@@ -95,34 +73,21 @@ Movies-List/
 └─ README.md
 ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
 ### 5. 使用方式
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
 #### 5.1 安装依赖
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
 ```bash
 npm install
 ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
 #### 5.2 本地开发运行
-
-## Learn More
 
 ```bash
 npm start
 ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 默认打开：<http://localhost:3000>
-
-To learn React, check out the [React documentation](https://reactjs.org/).
 
 #### 5.3 打包构建
 
@@ -132,51 +97,24 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 npm run build
 ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
 #### 5.4 运行测试
-
-### Analyzing the Bundle Size
 
 ```bash
 npm test
 ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
 > CRA 默认测试通常以交互 watch 模式运行。
-
-### Making a Progressive Web App
 
 ### 6. 环境变量配置（推荐）
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-建议在项目根目录创建 `.env`，配置 OMDb API Key：
-
-### Advanced Configuration
-
-```bash
-REACT_APP_OMDB_API_KEY=your_api_key
-```
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+建议在项目根目录创建 `.env`，配置 OMDb API Key
 然后重新启动开发服务或重新部署（如 Vercel）。
 
-### Deployment
-
 ### 7. 部署说明（Vercel）
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
 - 该项目已使用 HTTPS 请求 OMDb（避免 Mixed Content）。
 - 在 Vercel 项目设置中配置环境变量：
   - `REACT_APP_OMDB_API_KEY`
-
-### `npm run build` fails to minify
-
----
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 ## English Documentation
 
