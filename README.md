@@ -6,6 +6,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 > 一个基于 React 的电影搜索与观影记录应用。  
 > A React-based movie search and watched-list application.
+> ⚠️注意，OMDB API一天只能调用1000次，如果用了一段时间后出现“Something went wrong with fetching movies”，很可能是API调用次数已用完。
+> ⚠️Note that the OMDB API can only be called 1000 times per day. If you encounter the error message "Something went wrong with fetching movies" after using it for some time, it is likely that the number of API calls has been exhausted.
 
 ## Available Scripts
 
