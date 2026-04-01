@@ -239,29 +239,27 @@ Movies-List/
 
 #### 5.1 Install dependencies
 
-```bash
+````bash
 npm install
-```
 
 #### 5.2 Run in development
 
 ```bash
 npm start
-```
+````
 
 Default URL: <http://localhost:3000>
 
 #### 5.3 Build for production
 
-```bash
+````bash
 npm run build
-```
 
 #### 5.4 Run tests
 
 ```bash
 npm test
-```
+````
 
 > CRA tests usually run in interactive watch mode by default.
 
