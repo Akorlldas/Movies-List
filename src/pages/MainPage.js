@@ -27,7 +27,7 @@ export default function MainPage() {
   const { movies, isLoading, error } = useMovies(query);
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
-  useDocumentTitle("Movies List");
+  useDocumentTitle(!selectedId && "Movies List");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -234,17 +234,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     [selectedId],
   );
 
-  useEffect(
-    function () {
-      if (!title) return;
-      document.title = `Movie | ${title}`;
-
-      return function () {
-        document.title = "usePopcorn";
-      };
-    },
-    [title],
-  );
+  useDocumentTitle(title ? `Movie | ${title}` : "Movies List");
 
   return (
     <div className="details">
