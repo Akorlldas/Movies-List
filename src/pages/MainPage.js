@@ -153,7 +153,14 @@ function MovieList({ movies, onSelectMovie }) {
 function Movie({ movie, onSelectMovie }) {
   return (
     <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <img
+        src={movie.Poster}
+        alt={movie.Title}
+        onError={(e) => {
+          e.target.src = "/defaultposter.jpg";
+        }}
+      />
+
       <h3>{movie.Title}</h3>
       <div>
         <p>
@@ -246,7 +253,13 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
-            <img src={poster} alt={`Poster of ${movie} movie`} />
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              onError={(e) => {
+                e.target.src = "/defaultposter.jpg";
+              }}
+            />
             <div className="details-overview">
               <h2>{title}</h2>
               <p>
@@ -342,7 +355,13 @@ function WatchedMoviesList({ watched, onSelectMovie, onDeleteWatched }) {
 function WatchedMovie({ movie, onSelectMovie, onDeleteWatched }) {
   return (
     <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <img
+        src={movie.poster}
+        alt={movie.title}
+        onError={(e) => {
+          e.target.src = "/defaultposter.jpg";
+        }}
+      />
       <h3>{movie.title}</h3>
       <div>
         <p>
