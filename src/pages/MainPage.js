@@ -27,7 +27,7 @@ export default function MainPage() {
   const { movies, isLoading, error } = useMovies(query);
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
-  useDocumentTitle("Movies List");
+  useDocumentTitle(selectedId ? "" : "Movies List");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
