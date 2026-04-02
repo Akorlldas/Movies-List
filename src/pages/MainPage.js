@@ -27,7 +27,7 @@ export default function MainPage() {
   const { movies, isLoading, error } = useMovies(query);
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
-  useDocumentTitle(!selectedId && "Movies List");
+  useDocumentTitle("Movies List");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -360,7 +360,10 @@ function WatchedMovie({ movie, onSelectMovie, onDeleteWatched }) {
 
         <button
           className="btn-delete"
-          onClick={() => onDeleteWatched(movie.imdbID)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteWatched(movie.imdbID);
+          }}
         >
           X
         </button>
