@@ -330,7 +330,7 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <HourglassIcon size={16} color="#edf7ef" />
-          <span>{avgRuntime} min</span>
+          <span>{avgRuntime.toFixed(2)} min</span>
         </p>
       </div>
     </div>
