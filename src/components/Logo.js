@@ -1,11 +1,12 @@
-import { MovieIcon } from "./Icons";
+import { BackIcon, MovieIcon } from "./Icons";
 import { Link } from "react-router-dom";
 
 function Logo({ Page }) {
   return Page === "recommendation" ? (
-    <Link to="/" className="link">
+    <Link to="/mainpage" className="link">
       <div className="logo">
-        <MovieIcon size={24} />
+        <BackIcon size={24} />
+
         <h1>Recommendation</h1>
       </div>
     </Link>

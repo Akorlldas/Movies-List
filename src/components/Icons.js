@@ -87,3 +87,15 @@ export function CalendarIcon(props) {
     </IconBase>
   );
 }
+
+export function BackIcon(props) {
+  return (
+    <IconBase {...props}>
+      {/* 箭头主线 */}
+      <path d="M19 12H5" />
+
+      {/* 箭头头部 */}
+      <path d="M12 19l-7-7 7-7" />
+    </IconBase>
+  );
+}

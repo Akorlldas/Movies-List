@@ -6,13 +6,15 @@ import SpinnerFullPage from "./components/SpinnerFullPage";
 const MainPage = lazy(() => import("./pages/MainPage"));
 const Recommendation = lazy(() => import("./pages/Recommendation"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const Homepage = lazy(() => import("./pages/Homepage"));
 
 function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<SpinnerFullPage />}>
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/mainpage" element={<MainPage />} />
           <Route path="/recommendation" element={<Recommendation />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
