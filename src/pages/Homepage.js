@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Homepage() {
+  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
+
   return (
     <>
       <div className="homepage">
@@ -26,7 +29,21 @@ function Homepage() {
         </div>
 
         <div className="entrance">
-          <img src="/logo192.png" alt="logo" className="hp-logo" />
+          <div className="hp-logo-wrapper">
+            {!isLogoLoaded && (
+              <div className="hp-logo-skeleton" aria-hidden="true" />
+            )}
+            <img
+              src="/logo192.png"
+              alt="logo"
+              className={`hp-logo ${isLogoLoaded ? "is-loaded" : "is-loading"}`}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              onLoad={() => setIsLogoLoaded(true)}
+              onError={() => setIsLogoLoaded(true)}
+            />
+          </div>
           <Link to="mainpage" className="hp-link">
             Movies List
           </Link>
