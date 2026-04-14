@@ -37,7 +37,7 @@ img {
 
 .nav-bar {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height: 7.2rem;
   padding: 0 3.2rem;
@@ -728,7 +728,7 @@ img {
 
   .details img {
     width: 100%;
-    max-height: 42rem;
+
     object-fit: cover;
   }
 

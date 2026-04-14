@@ -1,12 +1,6 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 
 function Homepage() {
-  useEffect(() => {
-    const img = new Image();
-    img.src = "/logo512.png";
-  }, []);
-
   return (
     <>
       <div className="homepage">
@@ -17,7 +11,7 @@ function Homepage() {
           <br />
           <p>
             欢迎使用Movies
-            List！我们是一个私密的电影搜索与观影记录平台。在这里，您可以自由地搜索电影、查看详情、为电影打分，记录自己对电影的感受！
+            List！这是一个电影搜索与观影记录平台。您可以自由地搜索电影、查看电影详情，并为电影打分，通过收集电影记录自己对电影的感受！
           </p>
           <p>
             Welcome to Movies List! We are a private movie search and viewing
