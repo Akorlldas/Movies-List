@@ -28,16 +28,63 @@ export default function MainPage() {
 
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [selectedFrom, setSelectedFrom] = useState("watched");
+  const [mobilePanel, setMobilePanel] = useState("watched");
+  const [isMobileLayout, setIsMobileLayout] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false,
+  );
   const { movies, isLoading, error } = useMovies(query);
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
   useDocumentTitle(selectedId ? "" : "Movies List");
 
-  function handleSelectMovie(id) {
+  useEffect(function () {
+    function handleResize() {
+      setIsMobileLayout(window.innerWidth <= 768);
+    }
+
+    function debounce(func, delay) {
+      let timeout;
+      return function () {
+        let context = this;
+        let args = arguments;
+
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        timeout = setTimeout(function () {
+          func.apply(context, args);
+        }, delay);
+      };
+    }
+
+    window.addEventListener("resize", debounce(handleResize, 300));
+    return () =>
+      window.removeEventListener("resize", debounce(handleResize, 300));
+  }, []);
+
+  useEffect(
+    function () {
+      if (!isMobileLayout) return;
+      if (query.trim() === "") return;
+      setMobilePanel("search");
+      setSelectedId(null);
+      setSelectedFrom("search");
+    },
+    [query, isMobileLayout],
+  );
+
+  function handleSelectMovie(id, source = "search") {
+    setSelectedFrom(source);
     setSelectedId((selectedId) => (id === selectedId ? null : id));
   }
 
-  function handleCloseMovie() {
+  function handleCloseMovie(nextPanel) {
+    if (isMobileLayout) {
+      if (nextPanel) setMobilePanel(nextPanel);
+      else if (selectedFrom === "watched") setMobilePanel("watched");
+      else setMobilePanel("search");
+    }
     setSelectedId(null);
   }
 
@@ -57,33 +104,86 @@ export default function MainPage() {
       </NavBar>
 
       <Main>
-        <Box>
-          {isLoading && <Loader />}
-          {!isLoading && !error && (
-            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
-          )}
-          {error && <ErrorMessage message={error} />}
-        </Box>
+        {isMobileLayout ? (
+          <Box showDesktopToggle={false} className="box-mobile-merged">
+            {!selectedId && (
+              <button
+                className="btn-switch-mobile"
+                onClick={() =>
+                  setMobilePanel((panel) =>
+                    panel === "search" ? "watched" : "search",
+                  )
+                }
+                aria-label="Switch between search results and watched movies"
+              >
+                {mobilePanel === "watched" ? (
+                  <UpArrowBold size={18} />
+                ) : (
+                  <DownArrowIcon size={18} />
+                )}
+              </button>
+            )}
 
-        <Box>
-          {selectedId ? (
-            <MovieDetails
-              selectedId={selectedId}
-              onCloseMovie={handleCloseMovie}
-              onAddWatched={handleAddWatched}
-              watched={watched}
-            />
-          ) : (
-            <>
-              <WatchedSummary watched={watched} />
-              <WatchedMoviesList
+            {selectedId ? (
+              <MovieDetails
+                selectedId={selectedId}
+                onCloseMovie={handleCloseMovie}
+                onAddWatched={handleAddWatched}
                 watched={watched}
-                onSelectMovie={handleSelectMovie}
-                onDeleteWatched={handleDeleteWatched}
               />
-            </>
-          )}
-        </Box>
+            ) : mobilePanel === "search" ? (
+              <>
+                {isLoading && <Loader />}
+                {!isLoading && !error && (
+                  <MovieList
+                    movies={movies}
+                    onSelectMovie={handleSelectMovie}
+                  />
+                )}
+                {error && <ErrorMessage message={error} />}
+              </>
+            ) : (
+              <>
+                <WatchedSummary watched={watched} />
+                <WatchedMoviesList
+                  watched={watched}
+                  onSelectMovie={handleSelectMovie}
+                  onDeleteWatched={handleDeleteWatched}
+                />
+              </>
+            )}
+          </Box>
+        ) : (
+          <>
+            <Box>
+              {isLoading && <Loader />}
+              {!isLoading && !error && (
+                <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+              )}
+              {error && <ErrorMessage message={error} />}
+            </Box>
+
+            <Box>
+              {selectedId ? (
+                <MovieDetails
+                  selectedId={selectedId}
+                  onCloseMovie={handleCloseMovie}
+                  onAddWatched={handleAddWatched}
+                  watched={watched}
+                />
+              ) : (
+                <>
+                  <WatchedSummary watched={watched} />
+                  <WatchedMoviesList
+                    watched={watched}
+                    onSelectMovie={handleSelectMovie}
+                    onDeleteWatched={handleDeleteWatched}
+                  />
+                </>
+              )}
+            </Box>
+          </>
+        )}
       </Main>
     </>
   );
@@ -135,21 +235,17 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function Box({ children }) {
+function Box({ children, showDesktopToggle = true, className = "" }) {
   const [isOpen, setIsOpen] = useState(true);
 
+  if (!showDesktopToggle) {
+    return <div className={`box ${className}`.trim()}>{children}</div>;
+  }
+
   return (
-    <div className="box">
+    <div className={`box${className}`.trim()}>
       <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "-" : "+"}
-      </button>
-
-      {/* 移动端适配 */}
-      <button
-        className="btn-toggle-mobile"
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        {isOpen ? <DownArrowIcon size={18} /> : <UpArrowBold size={18} />}
       </button>
 
       {isOpen && children}
@@ -161,7 +257,11 @@ function MovieList({ movies, onSelectMovie }) {
   return (
     <ul className="list list-movies">
       {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
+        <Movie
+          movie={movie}
+          key={movie.imdbID}
+          onSelectMovie={(id) => onSelectMovie(id, "search")}
+        />
       ))}
     </ul>
   );
@@ -237,7 +337,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     };
 
     onAddWatched(newWatchedMovie);
-    onCloseMovie();
+    onCloseMovie("watched");
   }
 
   useKey("Escape", onCloseMovie);
@@ -365,7 +465,7 @@ function WatchedMoviesList({ watched, onSelectMovie, onDeleteWatched }) {
         <WatchedMovie
           movie={movie}
           key={movie.imdbID}
-          onSelectMovie={onSelectMovie}
+          onSelectMovie={(id) => onSelectMovie(id, "watched")}
           onDeleteWatched={onDeleteWatched}
         />
       ))}
