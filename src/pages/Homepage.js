@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 function Homepage() {
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/logo512.png";
+  }, []);
+
   return (
     <>
       <div className="homepage">

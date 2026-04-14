@@ -3,6 +3,7 @@ import StarRating from "../components/StarRating";
 import { useKey } from "../hooks/useKey";
 import { useLocalStorageState } from "../hooks/useLocalStorageState";
 import { useMovies } from "../hooks/useMovies";
+import { Link } from "react-router-dom";
 
 import {
   StarIcon,
@@ -10,6 +11,9 @@ import {
   SparkleStarIcon,
   HourglassIcon,
   CalendarIcon,
+  BackIcon,
+  DownArrowIcon,
+  UpArrowBold,
 } from "../components/Icons";
 import NavBar from "../components/NavBar";
 import useDocumentTitle from "../hooks/useDocumentTitle";
@@ -103,14 +107,19 @@ function Search({ query, setQuery }) {
   });
 
   return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      ref={inputEl}
-    />
+    <div className="search-row">
+      <Link to="/" className="btn-nav-back" aria-label="Back to homepage">
+        <BackIcon size={18} />
+      </Link>
+      <input
+        className="search"
+        type="text"
+        placeholder="Search movies..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        ref={inputEl}
+      />
+    </div>
   );
 }
 
@@ -133,6 +142,14 @@ function Box({ children }) {
     <div className="box">
       <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "-" : "+"}
+      </button>
+
+      {/* 移动端适配 */}
+      <button
+        className="btn-toggle-mobile"
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        {isOpen ? <DownArrowIcon size={18} /> : <UpArrowBold size={18} />}
       </button>
 
       {isOpen && children}

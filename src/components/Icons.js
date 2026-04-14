@@ -90,12 +90,44 @@ export function CalendarIcon(props) {
 
 export function BackIcon(props) {
   return (
+    <IconBase
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.8}
+      {...props}
+    >
+      <path d="M14 6L8 12L14 18" />
+    </IconBase>
+  );
+}
+
+export function MenuIconCompact(props) {
+  return (
     <IconBase {...props}>
-      {/* 箭头主线 */}
-      <path d="M19 12H5" />
+      <path d="M4 7h16" />
+      <path d="M4 12h16" />
+      <path d="M4 17h16" />
+    </IconBase>
+  );
+}
+
+export function UpArrowBold(props) {
+  return (
+    <IconBase {...props} strokeWidth={3}>
+      <path d="M12 20V6" />
+      <path d="M5 13l7-7 7 7" />
+    </IconBase>
+  );
+}
+
+export function DownArrowIcon(props) {
+  return (
+    <IconBase {...props} strokeWidth={3}>
+      {/* 主线 */}
+      <path d="M12 4v14" />
 
       {/* 箭头头部 */}
-      <path d="M12 19l-7-7 7-7" />
+      <path d="M5 13l7 7 7-7" />
     </IconBase>
   );
 }
