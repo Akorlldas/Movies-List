@@ -21,8 +21,6 @@ import useDocumentTitle from "../hooks/useDocumentTitle";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "f84fc31d";
-
 export default function MainPage() {
   const Page = "mainpage";
 
@@ -347,7 +345,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
-          `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
+          `/api/omdb?i=${encodeURIComponent(selectedId)}`,
         );
         const data = await res.json();
         setMovie(data);

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 
-const KEY = "f84fc31d";
-
 export function useMovies(query) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,10 +14,9 @@ export function useMovies(query) {
           setIsLoading(true);
           setError("");
 
-          const res = await fetch(
-            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal },
-          );
+          const res = await fetch(`/api/omdb?s=${encodeURIComponent(query)}`, {
+            signal: controller.signal,
+          });
 
           if (!res.ok)
             throw new Error("Something went wrong with fetching movies");

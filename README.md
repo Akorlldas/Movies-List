@@ -109,14 +109,25 @@ npm test
 
 ### 6. 环境变量配置（推荐）
 
-建议在项目根目录创建 `.env`，配置 OMDb API Key
-然后重新启动开发服务或重新部署（如 Vercel）。
+该项目已通过 Vercel Serverless Function 代理 OMDb 请求，避免把 API Key 写在前端代码中。
+
+建议在项目根目录创建 `.env.local`：
+
+```bash
+OMDB_API_KEY=your_api_key
+```
+
+> 如果你使用 `npm start`（CRA dev server），`/api/*` 不会自动提供。
+> 本地联调 Vercel Function 请使用 `vercel dev`。
+
+配置后请重启开发服务或重新部署。
 
 ### 7. 部署说明（Vercel）
 
 - 该项目已使用 HTTPS 请求 OMDb（避免 Mixed Content）。
 - 在 Vercel 项目设置中配置环境变量：
-  - `REACT_APP_OMDB_API_KEY`
+  - `OMDB_API_KEY`
+- 前端通过 `/api/omdb?s=...` 与 `/api/omdb?i=...` 调用服务端代理，再由服务端访问 OMDb。
 
 ## English Documentation
 
@@ -205,19 +216,25 @@ npm test
 
 ### 6. Environment Variables (Recommended)
 
-Create a `.env` file in project root:
+This project now uses a Vercel Serverless Function as an OMDb proxy, so the key is not hardcoded in client code.
+
+Create a `.env.local` file in project root:
 
 ```bash
-REACT_APP_OMDB_API_KEY=your_api_key
+OMDB_API_KEY=your_api_key
 ```
 
-Restart the dev server or redeploy after setting env vars.
+> If you run `npm start` (CRA dev server), `/api/*` routes are not served automatically.
+> For local end-to-end testing with serverless functions, run `vercel dev`.
+
+Restart your local server or redeploy after setting env vars.
 
 ### 7. Deployment Notes (Vercel)
 
 - The app uses HTTPS for OMDb requests to avoid mixed-content issues.
 - Set this env var in Vercel project settings:
-  - `REACT_APP_OMDB_API_KEY`
+  - `OMDB_API_KEY`
+- Client calls `/api/omdb?s=...` and `/api/omdb?i=...`; the serverless function requests OMDb using the server-side key.
 
 ---
 
