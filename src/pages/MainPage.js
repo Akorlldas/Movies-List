@@ -241,7 +241,7 @@ function Box({ children, showDesktopToggle = true, className = "" }) {
   }
 
   return (
-    <div className={`box${className}`.trim()}>
+    <div className={`box ${className}`.trim()}>
       <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "-" : "+"}
       </button>
