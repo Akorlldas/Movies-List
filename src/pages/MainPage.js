@@ -29,7 +29,7 @@ export default function MainPage() {
   const [selectedFrom, setSelectedFrom] = useState("watched");
   const [mobilePanel, setMobilePanel] = useState("watched");
   const [isMobileLayout, setIsMobileLayout] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 1024 : false,
+    typeof window !== "undefined" ? window.innerWidth <= 900 : false,
   );
   const { movies, isLoading, error } = useMovies(query);
 
@@ -38,7 +38,7 @@ export default function MainPage() {
 
   useEffect(function () {
     function handleResize() {
-      setIsMobileLayout(window.innerWidth <= 1024);
+      setIsMobileLayout(window.innerWidth <= 900);
     }
 
     function debounce(func, delay) {
