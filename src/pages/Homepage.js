@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 function Homepage() {
+  useDocumentTitle("Home");
   const [isLogoLoaded, setIsLogoLoaded] = useState(false);
 
   return (
