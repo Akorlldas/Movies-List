@@ -859,3 +859,25 @@ img {
     display: none;
   }
 }
+
+.virtual-list-container {
+  height: 56rem;
+  overflow-y: auto;
+}
+
+.virtual-list-container .list {
+  padding: 0;
+}
+
+.virtual-list-container li[aria-hidden="true"] {
+  display: block;
+  border: 0;
+  padding: 0;
+}
+
+.list-loading-more {
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-text-dark);
+  font-size: 1.4rem;
+}

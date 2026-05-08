@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const { s, i } = req.query;
+  const { s, i, page } = req.query;
   const apiKey = process.env.OMDB_API_KEY;
 
   if (!apiKey) {
@@ -20,6 +20,7 @@ export default async function handler(req, res) {
 
   if (s) params.set("s", s);
   if (i) params.set("i", i);
+  if (page) params.set("page", page);
 
   try {
     const omdbRes = await fetch(

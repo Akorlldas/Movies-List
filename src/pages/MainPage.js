@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useDebounce } from "../hooks/useDebounce";
+import { useVirtualList } from "../hooks/useVirtualList";
 import StarRating from "../components/StarRating";
 import { useKey } from "../hooks/useKey";
 import { useLocalStorageState } from "../hooks/useLocalStorageState";
@@ -31,7 +33,8 @@ export default function MainPage() {
   const [isMobileLayout, setIsMobileLayout] = useState(
     typeof window !== "undefined" ? window.innerWidth <= 900 : false,
   );
-  const { movies, isLoading, error } = useMovies(query);
+  const debouncedQuery = useDebounce(query, 350);
+  const { movies, isLoading, isFetchingMore, error, loadMore } = useMovies(debouncedQuery);
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
   useDocumentTitle(selectedId ? "" : "Movies List");
@@ -136,6 +139,8 @@ export default function MainPage() {
                   <MovieList
                     movies={movies}
                     onSelectMovie={handleSelectMovie}
+                    onReachEnd={loadMore}
+                    isFetchingMore={isFetchingMore}
                   />
                 )}
                 {error && <ErrorMessage message={error} />}
@@ -156,7 +161,12 @@ export default function MainPage() {
             <Box>
               {isLoading && <Loader />}
               {!isLoading && !error && (
-                <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+                <MovieList
+                  movies={movies}
+                  onSelectMovie={handleSelectMovie}
+                  onReachEnd={loadMore}
+                  isFetchingMore={isFetchingMore}
+                />
               )}
               {error && <ErrorMessage message={error} />}
             </Box>
@@ -251,17 +261,45 @@ function Box({ children, showDesktopToggle = true, className = "" }) {
   );
 }
 
-function MovieList({ movies, onSelectMovie }) {
+function MovieList({ movies, onSelectMovie, onReachEnd, isFetchingMore }) {
+  const ITEM_HEIGHT = 92;
+  const CONTAINER_HEIGHT = 560;
+
+  const [scrollTop, setScrollTop] = useState(0);
+
+  const { visibleItems, topSpacerHeight, bottomSpacerHeight } = useVirtualList({
+    items: movies,
+    itemHeight: ITEM_HEIGHT,
+    containerHeight: CONTAINER_HEIGHT,
+    scrollTop,
+    overscan: 8,
+  });
+
+  function handleScroll(event) {
+    const { scrollTop: nextScrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    setScrollTop(nextScrollTop);
+
+    const threshold = 300;
+    if (scrollHeight - (nextScrollTop + clientHeight) <= threshold) onReachEnd();
+  }
+
   return (
-    <ul className="list list-movies">
-      {movies?.map((movie) => (
-        <Movie
-          movie={movie}
-          key={movie.imdbID}
-          onSelectMovie={(id) => onSelectMovie(id, "search")}
-        />
-      ))}
-    </ul>
+    <div className="virtual-list-container" onScroll={handleScroll}>
+      <ul className="list list-movies">
+        {topSpacerHeight > 0 && <li style={{ height: `${topSpacerHeight}px` }} aria-hidden="true" />}
+
+        {visibleItems?.map((movie) => (
+          <Movie
+            movie={movie}
+            key={movie.imdbID}
+            onSelectMovie={(id) => onSelectMovie(id, "search")}
+          />
+        ))}
+
+        {bottomSpacerHeight > 0 && <li style={{ height: `${bottomSpacerHeight}px` }} aria-hidden="true" />}
+      </ul>
+      {isFetchingMore && <p className="list-loading-more">Loading more...</p>}
+    </div>
   );
 }
 
