@@ -18,6 +18,8 @@ import {
 import NavBar from "../components/NavBar";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 
+const DEFAULT_POSTER = "/defaultposter.jpg";
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -265,15 +267,45 @@ function MovieList({ movies, onSelectMovie }) {
   );
 }
 
+function PosterImage({
+  src,
+  alt,
+  containerClassName,
+  imageClassName,
+  lazy = false,
+}) {
+  const initialPoster = src && src !== "N/A" ? src : DEFAULT_POSTER;
+  const [posterSrc, setPosterSrc] = useState(initialPoster);
+
+  useEffect(() => {
+    setPosterSrc(src && src !== "N/A" ? src : DEFAULT_POSTER);
+  }, [src]);
+
+  return (
+    <div className={containerClassName}>
+      <img
+        src={posterSrc}
+        alt={alt}
+        className={imageClassName}
+        loading={lazy ? "lazy" : undefined}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          setPosterSrc(DEFAULT_POSTER);
+        }}
+      />
+    </div>
+  );
+}
+
 function Movie({ movie, onSelectMovie }) {
   return (
     <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img
+      <PosterImage
         src={movie.Poster}
         alt={movie.Title}
-        onError={(e) => {
-          e.target.src = "/defaultposter.jpg";
-        }}
+        containerClassName="poster poster-list"
+        imageClassName="poster-media"
+        lazy
       />
 
       <h3>{movie.Title}</h3>
@@ -368,12 +400,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
-            <img
+            <PosterImage
               src={movie.Poster}
               alt={movie.Title}
-              onError={(e) => {
-                e.target.src = "/defaultposter.jpg";
-              }}
+              containerClassName="poster poster-details"
+              imageClassName="poster-media"
             />
             <div className="details-overview">
               <h2>{title}</h2>
@@ -474,12 +505,12 @@ function WatchedMoviesList({ watched, onSelectMovie, onDeleteWatched }) {
 function WatchedMovie({ movie, onSelectMovie, onDeleteWatched }) {
   return (
     <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img
+      <PosterImage
         src={movie.poster}
         alt={movie.title}
-        onError={(e) => {
-          e.target.src = "/defaultposter.jpg";
-        }}
+        containerClassName="poster poster-list"
+        imageClassName="poster-media"
+        lazy
       />
       <h3>{movie.title}</h3>
       <div>
