@@ -1,6 +1,4 @@
-# Getting Started with Create React App
-
-# usePopcorn (Movies List)
+# Movies List
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -133,7 +131,7 @@ OMDB_API_KEY=your_api_key
 
 ### 1. Overview
 
-`usePopcorn` is a small React project that lets users:
+`Movies-List` is a small React project that lets users:
 
 - search movies by keyword,
 - view movie details (plot, cast, director, IMDb rating),
