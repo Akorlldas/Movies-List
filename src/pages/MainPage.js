@@ -320,8 +320,9 @@ function Movie({ movie, onSelectMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [userRating, setUserRating] = useState("");
 
   const countRef = useRef(0);
@@ -349,7 +350,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Actors: actors,
     Director: director,
     Genre: genre,
-  } = movie;
+  } = movie ?? {};
 
   const isTop = imdbRating > 8;
   console.log(isTop);
@@ -374,16 +375,47 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
-      async function getMovieDetails() {
-        setIsLoading(true);
-        const res = await fetch(
-          `/api/omdb?i=${encodeURIComponent(selectedId)}`,
-        );
-        const data = await res.json();
-        setMovie(data);
+      if (!selectedId) {
+        setMovie(null);
+        setError("");
         setIsLoading(false);
+        return;
+      }
+
+      const controller = new AbortController();
+
+      async function getMovieDetails() {
+        try {
+          setIsLoading(true);
+          setError("");
+          setMovie(null);
+
+          const res = await fetch(
+            `/api/omdb?i=${encodeURIComponent(selectedId)}`,
+            {
+              signal: controller.signal,
+            },
+          );
+          const data = await res.json();
+
+          if (data.Response === "False") throw new Error(data.Error);
+
+          setMovie(data);
+          setError("");
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            setError(err.message);
+            setMovie(null);
+          }
+        } finally {
+          if (!controller.signal.aborted) setIsLoading(false);
+        }
       }
       getMovieDetails();
+
+      return function () {
+        controller.abort();
+      };
     },
     [selectedId],
   );
@@ -394,7 +426,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     <div className="details">
       {isLoading ? (
         <Loader />
-      ) : (
+      ) : error ? (
+        <ErrorMessage message={error} />
+      ) : movie ? (
         <>
           <header>
             <button className="btn-back" onClick={onCloseMovie}>
@@ -448,7 +482,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <p>Directed by {director}</p>
           </section>
         </>
-      )}
+      ) : null}
     </div>
   );
 }
